@@ -41,7 +41,7 @@ const ChangePassword = () => {
       }
 
       const res = await axios.put(
-        "http://localhost:5000/api/auth/change-password",
+        "https://real-fraud-backend.onrender.com/api/auth/change-password",
         { oldPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -72,21 +72,25 @@ const ChangePassword = () => {
         </div>
 
         <nav className="nav-menu">
-          <a href="/userdashboard">
+          <button className="nav-btn" onClick={() => navigate("/userdashboard")}>
             <FaTachometerAlt /> Dashboard
-          </a>
-          <a href="/uransactions">
+          </button>
+
+          <button className="nav-btn" onClick={() => navigate("/transactions")}>
             <FaExchangeAlt /> Transactions
-          </a>
-          <a href="/reports">
+          </button>
+
+          <button className="nav-btn" onClick={() => navigate("/reports")}>
             <FaChartBar /> Reports
-          </a>
-          <a href="/help">
+          </button>
+
+          <button className="nav-btn" onClick={() => navigate("/help")}>
             <FaQuestionCircle /> Help & Support
-          </a>
-          <a href="/change-password" className="active">
+          </button>
+
+          <button className="nav-btn active" onClick={() => navigate("/change-password")}>
             <FaLock /> Change Password
-          </a>
+          </button>
         </nav>
 
         <button className="logout-btn" onClick={handleLogout}>
@@ -107,11 +111,11 @@ const ChangePassword = () => {
           <h2>Change Password</h2>
 
           <form onSubmit={handleChangePassword}>
-            {/* ===== Login ID ===== */}
+            {/* Login ID */}
             <label>Email/User ID</label>
             <input type="text" value={loginId} disabled />
 
-            {/* ===== Old Password ===== */}
+            {/* Old Password */}
             <label>Old Password</label>
             <input
               type="password"
@@ -121,7 +125,7 @@ const ChangePassword = () => {
               required
             />
 
-            {/* ===== New Password ===== */}
+            {/* New Password */}
             <label>New Password</label>
             <input
               type="password"
@@ -131,7 +135,7 @@ const ChangePassword = () => {
               required
             />
 
-            {/* ===== Confirm New Password ===== */}
+            {/* Confirm New Password */}
             <label>Confirm New Password</label>
             <input
               type="password"

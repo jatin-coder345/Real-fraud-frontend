@@ -1,6 +1,8 @@
+// Start coding here
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./Userdashboard.css";
+// import "./UserDashboard.css";
+import "./UserDashboard.css";
 import axios from "axios";
 import io from "socket.io-client";
 import {
@@ -15,6 +17,7 @@ import {
   FaSignOutAlt,
   FaQuestionCircle,
 } from "react-icons/fa";
+
 import {
   LineChart,
   Line,
@@ -29,7 +32,7 @@ import {
 } from "recharts";
 
 const socket = io("https://real-fraud-backend.onrender.com");
-const COLORS = ["#22c55e", "#ef4444"]; // Success = Green, Failed = Red
+const COLORS = ["#22c55e", "#ef4444"]; // SUCCESS / FAILED
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -44,18 +47,21 @@ const UserDashboard = () => {
     totalCredits: 0,
     totalDebits: 0,
   });
+
   const [activeTab, setActiveTab] = useState("all");
   const [showProfile, setShowProfile] = useState(false);
 
-  // ===== Load logged-in user =====
+  // Load logged-in user
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
+
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
-      fetchUserTransactions(parsedUser._id);
 
+      fetchUserTransactions(parsedUser._id);
       socket.emit("registerUser", parsedUser._id);
+
       socket.on("newTransaction", (txn) => {
         if (txn.user === parsedUser._id) {
           setTransactions((prev) => [txn, ...prev]);
@@ -65,12 +71,10 @@ const UserDashboard = () => {
       navigate("/login");
     }
 
-    return () => {
-      socket.off("newTransaction");
-    };
+    return () => socket.off("newTransaction");
   }, [navigate]);
 
-  // ===== Fetch transactions =====
+  // Fetch transactions
   const fetchUserTransactions = async (userId) => {
     try {
       const res = await axios.get(
@@ -82,20 +86,22 @@ const UserDashboard = () => {
     }
   };
 
-  // ===== Update summary whenever transactions change =====
+  // Update summary
   useEffect(() => {
     if (transactions.length > 0) {
       const totalTransactions = transactions.length;
       const failedTransactions = transactions.filter(
         (t) => t.status === "failed"
       ).length;
-      const totalAmount = transactions.reduce((acc, t) => acc + t.amount, 0);
+
+      const totalAmount = transactions.reduce((a, t) => a + t.amount, 0);
       const totalCredits = transactions
         .filter((t) => t.type === "credit")
-        .reduce((acc, t) => acc + t.amount, 0);
+        .reduce((a, t) => a + t.amount, 0);
+
       const totalDebits = transactions
         .filter((t) => t.type === "debit")
-        .reduce((acc, t) => acc + t.amount, 0);
+        .reduce((a, t) => a + t.amount, 0);
 
       setSummary({
         totalTransactions,
@@ -107,7 +113,22 @@ const UserDashboard = () => {
     }
   }, [transactions]);
 
-  // ===== Charts Data =====
+  // Logout
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/home");
+  };
+
+  // Menu active highlight
+  const getActiveMenu = () => {
+    const path = location.pathname;
+    if (path.includes("/transactions")) return "transactions";
+    if (path.includes("/reports")) return "reports";
+    if (path.includes("/help")) return "help";
+    if (path.includes("/change-password")) return "change-password";
+    return "dashboard";
+  };
+
   const pieData = [
     {
       name: "Successful",
@@ -121,27 +142,6 @@ const UserDashboard = () => {
     Amount: txn.amount,
   }));
 
-  // ===== Sidebar and Logout =====
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/home");
-  };
-
-  const handleMenuClick = (menu, path) => {
-    navigate(path);
-  };
-
-  const getActiveMenu = () => {
-    const path = location.pathname;
-    if (path.includes("/transactions")) return "transactions";
-    if (path.includes("/reports")) return "reports";
-    if (path.includes("/settings")) return "settings";
-    if (path.includes("/help")) return "help";
-    if (path.includes("/change-password")) return "change-password";
-    return "dashboard";
-  };
-
-  // ===== Transaction filters =====
   const filteredTransactions =
     activeTab === "failed"
       ? transactions.filter((t) => t.status === "failed")
@@ -149,13 +149,22 @@ const UserDashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {/* ===== Sidebar ===== */}
+      {/* SIDEBAR */}
       <aside className="sidebar">
         <div
-          className="user-profile top-profile"
+          className="user-profile"
           onClick={() => setShowProfile(!showProfile)}
         >
-          <FaUserCircle className="user-icon" />
+          {user?.profilePhoto ? (
+            <img
+              src={user.profilePhoto}
+              alt="Profile"
+              className="sidebar-profile-photo"
+            />
+          ) : (
+            <FaUserCircle className="user-icon" />
+          )}
+
           <div>
             <p className="user-name">{user?.firstName || "Guest User"}</p>
             <span className="user-role">{user?.role || "Member"}</span>
@@ -164,20 +173,22 @@ const UserDashboard = () => {
 
         {showProfile && (
           <div className="profile-popup">
-            <FaUserCircle className="popup-avatar" />
-            <h4>{user?.firstName || "Guest User"}</h4>
-            <p>{user?.loginId || "user@example.com"}</p>
+            {user?.profilePhoto ? (
+              <img
+                src={user.profilePhoto}
+                className="popup-avatar-img"
+                alt="Profile"
+              />
+            ) : (
+              <FaUserCircle className="popup-avatar" />
+            )}
+
+            <h4>{user?.firstName}</h4>
+            <p>{user?.email}</p>
+
             <button onClick={() => navigate("/Aprofile")}>
               View Profile
             </button>
-            {/* <button
-              onClick={() => handleMenuClick("settings", "/settings")}
-            >
-              Settings
-            </button> */}
-            {/*<button className="logout-popup" onClick={handleLogout}>
-              <FaSignOutAlt /> Logout
-            </button>*/}
           </div>
         )}
 
@@ -186,76 +197,82 @@ const UserDashboard = () => {
         <ul className="menu">
           <li
             className={getActiveMenu() === "dashboard" ? "active" : ""}
-            onClick={() => handleMenuClick("dashboard", "/userdashboard")}
+            onClick={() => navigate("/userdashboard")}
           >
             <FaTachometerAlt /> Dashboard
           </li>
+
           <li
             className={getActiveMenu() === "transactions" ? "active" : ""}
-            onClick={() => handleMenuClick("transactions", "/transactions")}
+            onClick={() => navigate("/transactions")}
           >
             <FaExchangeAlt /> Transactions
           </li>
+
           <li
             className={getActiveMenu() === "reports" ? "active" : ""}
-            onClick={() => handleMenuClick("reports", "/reports")}
+            onClick={() => navigate("/reports")}
           >
             <FaChartBar /> Reports
           </li>
+
           <li
             className={getActiveMenu() === "help" ? "active" : ""}
-            onClick={() => handleMenuClick("help", "/help")}
+            onClick={() => navigate("/help")}
           >
             <FaQuestionCircle /> Help & Support
           </li>
+
           <li
             className={getActiveMenu() === "change-password" ? "active" : ""}
-            onClick={() =>
-              handleMenuClick("change-password", "/change-password")
-            }
+            onClick={() => navigate("/change-password")}
           >
             <FaCog /> Change Password
           </li>
         </ul>
 
         <div className="logout-btn" onClick={handleLogout}>
-          <FaSignOutAlt className="logout-icon" />
+          <FaSignOutAlt />
           <span>Logout</span>
         </div>
       </aside>
 
-      {/* ===== Main Content ===== */}
+      {/* MAIN CONTENT */}
       <main className="main-content">
         <div className="header">
           <h2>📊 User Transaction Dashboard</h2>
           <p>Real-time insights into your activity</p>
         </div>
 
-        {/* ===== Overview Cards ===== */}
+        {/* SUMMARY CARDS */}
         <div className="overview-section">
           <div className="overview-card" style={{ borderTop: "5px solid #3b82f6" }}>
             <h4>Total Transactions</h4>
             <p>{summary.totalTransactions}</p>
           </div>
+
           <div className="overview-card" style={{ borderTop: "5px solid #22c55e" }}>
             <h4>Total Amount</h4>
             <p>₹{summary.totalAmount.toLocaleString()}</p>
           </div>
+
           <div className="overview-card" style={{ borderTop: "5px solid #16a34a" }}>
             <h4>Credits</h4>
             <p>₹{summary.totalCredits.toLocaleString()}</p>
           </div>
+
           <div className="overview-card" style={{ borderTop: "5px solid #f97316" }}>
             <h4>Debits</h4>
             <p>₹{summary.totalDebits.toLocaleString()}</p>
           </div>
+
           <div className="overview-card" style={{ borderTop: "5px solid #ef4444" }}>
             <h4>Failed Transactions</h4>
             <p>{summary.failedTransactions}</p>
           </div>
         </div>
 
-        {/* ===== Graphs ===== */}
+        {/* GRAPHS */}
         <div className="graph-section">
           <div className="graph-box">
             <h3>📈 Transaction Amount Trend</h3>
@@ -264,12 +281,7 @@ const UserDashboard = () => {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="Amount"
-                  stroke="#3b82f6"
-                  strokeWidth={3}
-                />
+                <Line type="monotone" dataKey="Amount" stroke="#3b82f6" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -287,8 +299,8 @@ const UserDashboard = () => {
                   outerRadius={90}
                   label
                 >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                  {pieData.map((entry, i) => (
+                    <Cell key={i} fill={COLORS[i]} />
                   ))}
                 </Pie>
                 <Legend />
@@ -298,7 +310,7 @@ const UserDashboard = () => {
           </div>
         </div>
 
-        {/* ===== Transactions Table ===== */}
+        {/* TRANSACTIONS TABLE */}
         <div className="transactions-frame">
           <div className="tab-buttons">
             <button
@@ -307,6 +319,7 @@ const UserDashboard = () => {
             >
               <FaTable /> All
             </button>
+
             <button
               className={activeTab === "failed" ? "active" : ""}
               onClick={() => setActiveTab("failed")}
@@ -326,15 +339,18 @@ const UserDashboard = () => {
                   <th>Fraud</th>
                 </tr>
               </thead>
+
               <tbody>
                 {filteredTransactions.length > 0 ? (
                   filteredTransactions.slice(0, 8).map((t) => (
                     <tr key={t._id}>
                       <td>₹{t.amount}</td>
                       <td>{t.type}</td>
+
                       <td className={t.status === "failed" ? "negative" : "positive"}>
                         {t.status}
                       </td>
+
                       <td>{t.description}</td>
                       <td>{t.fraud_detected ? "🚨" : "✅"}</td>
                     </tr>

@@ -1,6 +1,7 @@
+// Start coding here
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaEnvelope, FaPhone, FaUser, FaArrowLeft, FaEdit } from "react-icons/fa";
+import { FaEnvelope, FaPhone, FaUser, FaArrowLeft, FaEdit, FaTrash } from "react-icons/fa";
 import "./Profile.css";
 import { useNavigate } from "react-router-dom";
 
@@ -9,74 +10,123 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
+  const [profileImage, setProfileImage] = useState(null);
+  const [loading, setLoading] = useState(false); // upload spinner
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
-  const [message, setMessage] = useState(""); // ✅ success/error message
-
-  const [messageType, setMessageType] = useState(""); // "success" or "error"
-  const [previewImage, setPreviewImage] = useState("");
-
-  // Load user data from localStorage on mount
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       setUser(storedUser);
-      setFormData(storedUser);
-      setPreviewImage(storedUser.profileImage || "");
+      setFormData({
+        firstName: storedUser.firstName,
+        lastName: storedUser.lastName,
+        phone: storedUser.phone,
+        userId: storedUser.userId,
+      });
+      setProfileImage(storedUser.profilePhoto || null);
     }
   }, []);
 
-  // Handle input change
+  // Handle text changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle image upload
-  const handleImageChange = (e) => {
+  // Upload Profile Photo
+  const handlePhotoUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-        setFormData({ ...formData, profileImage: reader.result });
+    if (!file) return;
+
+    setLoading(true); // start spinner
+
+    const previewURL = URL.createObjectURL(file);
+    setProfileImage(previewURL);
+
+    try {
+      const formDataImg = new FormData();
+      formDataImg.append("photo", file);
+
+      const token = localStorage.getItem("token");
+
+      const uploadRes = await axios.post(
+        `https://real-fraud-backend.onrender.com/api/auth/upload-photo/${user._id}`,
+        formDataImg,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const uploadedURL = uploadRes.data.url;
+
+      const updatedUser = {
+        ...user,
+        profilePhoto: uploadedURL,
       };
-      reader.readAsDataURL(file);
+
+      setUser(updatedUser);
+      setProfileImage(uploadedURL);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setLoading(false); // stop spinner
+
+      setMessage("Profile photo updated!");
+      setMessageType("success");
+      setTimeout(() => setMessage(""), 2500);
+    } catch (err) {
+      setLoading(false);
+      console.error(err);
+      setMessage("Failed to upload.");
+      setMessageType("error");
     }
   };
 
-  // Save updated profile
-  const handleSave = async () => {
-    // Validation
-    if (!formData.firstName || !formData.lastName || !formData.phone) {
-      setMessage("Please fill all required fields!");
-      setMessageType("error");
-      setTimeout(() => setMessage(""), 3000);
-      return;
-    }
+  // REMOVE PHOTO (LOCAL ONLY)
+  const handleRemovePhoto = () => {
+    const updatedUser = {
+      ...user,
+      profilePhoto: null,
+    };
 
+    setProfileImage(null);
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+    setMessage("Profile photo removed.");
+    setMessageType("success");
+    setTimeout(() => setMessage(""), 2500);
+  };
+
+  // Save Edited Fields
+  const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
+
       const response = await axios.put(
-        `http://localhost:5000/api/auth/update/${user._id}`,
+        `https://real-fraud-backend.onrender.com/api/auth/update/${user._id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      setUser(response.data.user);
+      const updatedUser = {
+        ...response.data.user,
+        profilePhoto: profileImage,
+      };
+
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
       setIsEditing(false);
 
-      // ✅ Success message
-      setMessage("Profile updated successfully!");
+      setMessage("Profile updated!");
       setMessageType("success");
-
-      setTimeout(() => setMessage(""), 3000);
-    } catch (error) {
-      console.error("Update error:", error);
-      setMessage("Failed to update profile.");
+      setTimeout(() => setMessage(""), 2500);
+    } catch (err) {
+      console.error(err);
+      setMessage("Update failed.");
       setMessageType("error");
-      setTimeout(() => setMessage(""), 3000);
+      setTimeout(() => setMessage(""), 2500);
     }
   };
 
@@ -90,34 +140,34 @@ const Profile = () => {
         </button>
 
         <div className="profile-avatar">
-          {previewImage ? (
-            <img src={previewImage} alt="Profile" className="profile-photo" />
+          {profileImage ? (
+            <img src={profileImage} alt="profile" className="profile-photo" />
           ) : (
-            <FaUser size={90} color="#2563eb" />
+            <FaUser size={85} color="#2563eb" />
           )}
+
+          <div className="upload-container">
+            <label className="upload-btn">
+              Upload Photo
+              <input type="file" accept="image/*" onChange={handlePhotoUpload} hidden />
+            </label>
+
+            {loading && <div className="spinner"></div>}
+          </div>
         </div>
 
-        {/* ✅ Message Box */}
         {message && <div className={`message-box ${messageType}`}>{message}</div>}
 
         {!isEditing ? (
           <>
-            <h2>{user.firstName || "User"}</h2>
+            <h2>{user.firstName}</h2>
             <p className="role-text">{user.role}</p>
 
             <div className="profile-info">
-              <p>
-                <FaEnvelope /> <strong>Email:</strong> {user.email}
-              </p>
-              <p>
-                <FaPhone /> <strong>Contact:</strong> {user.phone || "Not provided"}
-              </p>
-              <p>
-                <FaUser /> <strong>User ID:</strong> {user._id}
-              </p>
-              <p>
-                <FaUser /> <strong>Username/Login ID:</strong> {user.userId}
-              </p>
+              <p><FaEnvelope /> <strong>Email:</strong> {user.email}</p>
+              <p><FaPhone /> <strong>Phone:</strong> {user.phone}</p>
+              <p><FaUser /> <strong>User ID:</strong> {user._id}</p>
+              <p><FaUser /> <strong>Username:</strong> {user.userId}</p>
             </div>
 
             <button className="edit-btn" onClick={() => setIsEditing(true)}>
@@ -127,44 +177,28 @@ const Profile = () => {
         ) : (
           <>
             <h2>Edit Profile</h2>
+
             <div className="edit-form">
-              <label>First Name*</label>
-              <input
-                name="firstName"
-                value={formData.firstName || ""}
-                onChange={handleChange}
-              />
+              <label>First Name</label>
+              <input name="firstName" value={formData.firstName} onChange={handleChange} />
 
-              <label>Last Name*</label>
-              <input
-                name="lastName"
-                value={formData.lastName || ""}
-                onChange={handleChange}
-              />
+              <label>Last Name</label>
+              <input name="lastName" value={formData.lastName} onChange={handleChange} />
 
-              <label>Email</label>
-              <input
-                name="email"
-                value={formData.email || ""}
-                disabled // ✅ email cannot be edited
-              />
+              <label>Email (Locked)</label>
+              <input value={user.email} disabled />
 
               <label>Phone</label>
-              <input
-                name="phone"
-                value={formData.phone || ""}
-                onChange={handleChange}
-              />
+              <input name="phone" value={formData.phone} onChange={handleChange} />
 
-              <label>Profile Photo</label>
-              <input type="file" accept="image/*" onChange={handleImageChange} />
+              {/* Remove Photo Button */}
+              <button className="remove-btn" onClick={handleRemovePhoto}>
+                <FaTrash /> Remove Photo
+              </button>
 
               <div className="edit-actions">
                 <button onClick={handleSave}>Save</button>
-                <button
-                  className="cancel-btn"
-                  onClick={() => setIsEditing(false)}
-                >
+                <button className="cancel-btn" onClick={() => setIsEditing(false)}>
                   Cancel
                 </button>
               </div>

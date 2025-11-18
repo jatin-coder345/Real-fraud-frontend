@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import UserTransactions from "./UserTransactions";
+
 import {
   FaChartBar,
   FaExchangeAlt,
@@ -10,15 +12,31 @@ import {
   FaQuestionCircle,
   FaLock,
 } from "react-icons/fa";
+
 import "./Transactions.css";
 
 const Transactions = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // ✅ Updated logout — no popup, direct redirect
+  // ✅ Logout
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "/home"; // instant redirect
+    navigate("/home");
   };
+
+  // ✅ Helper to detect active menu
+  const getActiveMenu = () => {
+    const path = location.pathname;
+    if (path.includes("/transactions")) return "transactions";
+    if (path.includes("/reports")) return "reports";
+    if (path.includes("/help")) return "help";
+    if (path.includes("/change-password")) return "change-password";
+    return "dashboard";
+  };
+
+  // ✅ Navigator function
+  const goTo = (path) => navigate(path);
 
   return (
     <div className="dashboard-container">
@@ -30,13 +48,53 @@ const Transactions = () => {
           <p></p>
         </div>
 
+        {/* === Navigation === */}
         <nav className="nav-menu">
-          <a href="/userdashboard"><FaTachometerAlt /> Dashboard</a>
-          <a href="/transactions" className="active"><FaExchangeAlt /> Transactions</a>
-          <a href="/reports"><FaChartBar /> Reports</a>
-          <a href="/help"><FaQuestionCircle /> Help & Support</a>
-          {/* <a href="/Settings"><FaCog /> Settings</a> */}
-          <a href="/change-password"><FaLock /> Change Password</a>
+
+          <div
+            className={`nav-item ${
+              getActiveMenu() === "dashboard" ? "active" : ""
+            }`}
+            onClick={() => goTo("/userdashboard")}
+          >
+            <FaTachometerAlt /> Dashboard
+          </div>
+
+          <div
+            className={`nav-item ${
+              getActiveMenu() === "transactions" ? "active" : ""
+            }`}
+            onClick={() => goTo("/transactions")}
+          >
+            <FaExchangeAlt /> Transactions
+          </div>
+
+          <div
+            className={`nav-item ${
+              getActiveMenu() === "reports" ? "active" : ""
+            }`}
+            onClick={() => goTo("/reports")}
+          >
+            <FaChartBar /> Reports
+          </div>
+
+          <div
+            className={`nav-item ${
+              getActiveMenu() === "help" ? "active" : ""
+            }`}
+            onClick={() => goTo("/help")}
+          >
+            <FaQuestionCircle /> Help & Support
+          </div>
+
+          <div
+            className={`nav-item ${
+              getActiveMenu() === "change-password" ? "active" : ""
+            }`}
+            onClick={() => goTo("/change-password")}
+          >
+            <FaLock /> Change Password
+          </div>
         </nav>
 
         {/* === Logout Button === */}
@@ -47,10 +105,7 @@ const Transactions = () => {
 
       {/* === MAIN CONTENT === */}
       <main className="transactions-page">
-        {/* === USER TRANSACTIONS COMPONENT === */}
-        <div>
-          <UserTransactions />
-        </div>
+        <UserTransactions />
       </main>
     </div>
   );

@@ -25,12 +25,12 @@ const Help = () => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // ✅ EmailJS Credentials
+  // EmailJS credentials
   const SERVICE_ID = "narmada123";
   const TEMPLATE_ID = "template_6alm0bi";
   const PUBLIC_KEY = "wu0Kidkg7ONEiz4XE";
 
-  // ✅ Send Email Function
+  // Send Email
   const sendEmail = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -39,23 +39,21 @@ const Help = () => {
       .sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY)
       .then(
         (result) => {
-          console.log("✅ Email Sent:", result.text);
           setSubmitted(true);
           e.target.reset();
           setLoading(false);
         },
         (error) => {
-          console.error("❌ Email Error:", error);
           alert("Failed to send message. Please check your EmailJS IDs.");
           setLoading(false);
         }
       );
   };
 
-  // ✅ Logout without popup
+  // Logout without popup
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/home"); // instant redirect, no confirm popup
+    navigate("/home");
   };
 
   return (
@@ -64,28 +62,52 @@ const Help = () => {
       <aside className="sidebar">
         <div className="user-section">
           <FaUserCircle className="user-icon" />
-          {/* <h3>Welcome</h3>
-          <p>User Panel</p> */}
         </div>
 
         <nav className="nav-menu">
-          <a href="/userdashboard">
+
+          {/* Dashboard */}
+          <button
+            className="nav-btn"
+            onClick={() => navigate("/userdashboard")}
+          >
             <FaTachometerAlt /> Dashboard
-          </a>
-          <a href="/transactions">
+          </button>
+
+          {/* Transactions */}
+          <button
+            className="nav-btn"
+            onClick={() => navigate("/transactions")}
+          >
             <FaExchangeAlt /> Transactions
-          </a>
-          <a href="/reports">
+          </button>
+
+          {/* Reports */}
+          <button
+            className="nav-btn"
+            onClick={() => navigate("/reports")}
+          >
             <FaChartBar /> Reports
-          </a>
-          <a href="/help" className="active">
+          </button>
+
+          {/* Help - Active */}
+          <button
+            className="nav-btn active"
+            onClick={() => navigate("/help")}
+          >
             <FaQuestionCircle /> Help & Support
-          </a>
-          <a href="/change-password">
+          </button>
+
+          {/* Change Password */}
+          <button
+            className="nav-btn"
+            onClick={() => navigate("/change-password")}
+          >
             <FaLock /> Change Password
-          </a>
+          </button>
         </nav>
 
+        {/* Logout */}
         <button className="logout-btn" onClick={handleLogout}>
           <FaSignOutAlt /> Logout
         </button>
@@ -94,7 +116,7 @@ const Help = () => {
       {/* === MAIN CONTENT === */}
       <main className="help-main">
         <div className="help-page">
-          {/* === HEADER === */}
+          {/* HEADER */}
           <header className="help-header">
             <Headphones className="header-icon" />
             <h1>Help & Support Center</h1>
@@ -104,7 +126,7 @@ const Help = () => {
             </p>
           </header>
 
-          {/* === SUPPORT INFO + FORM === */}
+          {/* SUPPORT INFO + FORM */}
           <section className="help-section">
             <div className="help-info">
               {/* Email */}
@@ -128,7 +150,12 @@ const Help = () => {
                 <BookOpen className="icon" />
                 <h3>Knowledge Base</h3>
                 <p>Explore FAQs, user guides, and tutorials.</p>
-                <button className="learn-btn"  onClick={() => navigate("/knowledge-base")}>Visit Hub</button>
+                <button
+                  className="learn-btn"
+                  onClick={() => navigate("/knowledge-base")}
+                >
+                  Visit Hub
+                </button>
               </div>
             </div>
 

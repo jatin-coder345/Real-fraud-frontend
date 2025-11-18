@@ -1,11 +1,10 @@
-import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import UserTransactions from "./UserTransactions";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import UserTransactions from "./UserTransactions.jsx";
 
 import {
   FaChartBar,
   FaExchangeAlt,
-  FaCog,
   FaTachometerAlt,
   FaUserCircle,
   FaSignOutAlt,
@@ -17,26 +16,13 @@ import "./Transactions.css";
 
 const Transactions = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
-  // ✅ Logout
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/home");
+    if (window.confirm("Are you sure you want to logout?")) {
+      localStorage.clear();
+      navigate("/login");
+    }
   };
-
-  // ✅ Helper to detect active menu
-  const getActiveMenu = () => {
-    const path = location.pathname;
-    if (path.includes("/transactions")) return "transactions";
-    if (path.includes("/reports")) return "reports";
-    if (path.includes("/help")) return "help";
-    if (path.includes("/change-password")) return "change-password";
-    return "dashboard";
-  };
-
-  // ✅ Navigator function
-  const goTo = (path) => navigate(path);
 
   return (
     <div className="dashboard-container">
@@ -48,56 +34,28 @@ const Transactions = () => {
           <p></p>
         </div>
 
-        {/* === Navigation === */}
         <nav className="nav-menu">
-
-          <div
-            className={`nav-item ${
-              getActiveMenu() === "dashboard" ? "active" : ""
-            }`}
-            onClick={() => goTo("/userdashboard")}
-          >
+          <button className="nav-btn" onClick={() => navigate("/userdashboard")}>
             <FaTachometerAlt /> Dashboard
-          </div>
+          </button>
 
-          <div
-            className={`nav-item ${
-              getActiveMenu() === "transactions" ? "active" : ""
-            }`}
-            onClick={() => goTo("/transactions")}
-          >
+          <button className="nav-btn active" onClick={() => navigate("/transactions")}>
             <FaExchangeAlt /> Transactions
-          </div>
+          </button>
 
-          <div
-            className={`nav-item ${
-              getActiveMenu() === "reports" ? "active" : ""
-            }`}
-            onClick={() => goTo("/reports")}
-          >
+          <button className="nav-btn" onClick={() => navigate("/reports")}>
             <FaChartBar /> Reports
-          </div>
+          </button>
 
-          <div
-            className={`nav-item ${
-              getActiveMenu() === "help" ? "active" : ""
-            }`}
-            onClick={() => goTo("/help")}
-          >
+          <button className="nav-btn" onClick={() => navigate("/help")}>
             <FaQuestionCircle /> Help & Support
-          </div>
+          </button>
 
-          <div
-            className={`nav-item ${
-              getActiveMenu() === "change-password" ? "active" : ""
-            }`}
-            onClick={() => goTo("/change-password")}
-          >
+          <button className="nav-btn" onClick={() => navigate("/change-password")}>
             <FaLock /> Change Password
-          </div>
+          </button>
         </nav>
 
-        {/* === Logout Button === */}
         <button className="logout-btn" onClick={handleLogout}>
           <FaSignOutAlt /> Logout
         </button>

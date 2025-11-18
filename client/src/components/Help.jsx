@@ -1,3 +1,4 @@
+// Start coding here
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
@@ -25,12 +26,12 @@ const Help = () => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // EmailJS credentials
+  // ✅ EmailJS Credentials
   const SERVICE_ID = "narmada123";
   const TEMPLATE_ID = "template_6alm0bi";
   const PUBLIC_KEY = "wu0Kidkg7ONEiz4XE";
 
-  // Send Email
+  // ✅ Send Email Function
   const sendEmail = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -39,21 +40,23 @@ const Help = () => {
       .sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY)
       .then(
         (result) => {
+          console.log("✅ Email Sent:", result.text);
           setSubmitted(true);
           e.target.reset();
           setLoading(false);
         },
         (error) => {
+          console.error("❌ Email Error:", error);
           alert("Failed to send message. Please check your EmailJS IDs.");
           setLoading(false);
         }
       );
   };
 
-  // Logout without popup
+  // ✅ Logout without popup
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/home");
+    navigate("/home"); // instant redirect, no confirm popup 
   };
 
   return (
@@ -62,52 +65,32 @@ const Help = () => {
       <aside className="sidebar">
         <div className="user-section">
           <FaUserCircle className="user-icon" />
+          {/* <h3>Welcome</h3>
+          <p>User Panel</p> */}
         </div>
 
-        <nav className="nav-menu">
+       <nav className="nav-menu">
+  <button className="nav-btn" onClick={() => navigate("/userdashboard")}>
+    <FaTachometerAlt /> Dashboard
+  </button>
 
-          {/* Dashboard */}
-          <button
-            className="nav-btn"
-            onClick={() => navigate("/userdashboard")}
-          >
-            <FaTachometerAlt /> Dashboard
-          </button>
+  <button className="nav-btn" onClick={() => navigate("/transactions")}>
+    <FaExchangeAlt /> Transactions
+  </button>
 
-          {/* Transactions */}
-          <button
-            className="nav-btn"
-            onClick={() => navigate("/transactions")}
-          >
-            <FaExchangeAlt /> Transactions
-          </button>
+  <button className="nav-btn active" onClick={() => navigate("/reports")}>
+    <FaChartBar /> Reports
+  </button>
 
-          {/* Reports */}
-          <button
-            className="nav-btn"
-            onClick={() => navigate("/reports")}
-          >
-            <FaChartBar /> Reports
-          </button>
+  <button className="nav-btn" onClick={() => navigate("/help")}>
+    <FaQuestionCircle /> Help & Support
+  </button>
 
-          {/* Help - Active */}
-          <button
-            className="nav-btn active"
-            onClick={() => navigate("/help")}
-          >
-            <FaQuestionCircle /> Help & Support
-          </button>
+  <button className="nav-btn" onClick={() => navigate("/change-password")}>
+    <FaLock /> Change Password
+  </button>
+</nav>
 
-          {/* Change Password */}
-          <button
-            className="nav-btn"
-            onClick={() => navigate("/change-password")}
-          >
-            <FaLock /> Change Password
-          </button>
-        </nav>
-
-        {/* Logout */}
         <button className="logout-btn" onClick={handleLogout}>
           <FaSignOutAlt /> Logout
         </button>
@@ -116,7 +99,7 @@ const Help = () => {
       {/* === MAIN CONTENT === */}
       <main className="help-main">
         <div className="help-page">
-          {/* HEADER */}
+          {/* === HEADER === */}
           <header className="help-header">
             <Headphones className="header-icon" />
             <h1>Help & Support Center</h1>
@@ -126,7 +109,7 @@ const Help = () => {
             </p>
           </header>
 
-          {/* SUPPORT INFO + FORM */}
+          {/* === SUPPORT INFO + FORM === */}
           <section className="help-section">
             <div className="help-info">
               {/* Email */}
@@ -150,12 +133,7 @@ const Help = () => {
                 <BookOpen className="icon" />
                 <h3>Knowledge Base</h3>
                 <p>Explore FAQs, user guides, and tutorials.</p>
-                <button
-                  className="learn-btn"
-                  onClick={() => navigate("/knowledge-base")}
-                >
-                  Visit Hub
-                </button>
+                <button className="learn-btn"  onClick={() => navigate("/knowledge-base")}>Visit Hub</button>
               </div>
             </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -10,22 +10,16 @@ import {
   FaQuestionCircle,
   FaLock,
 } from "react-icons/fa";
-import cpassword from "../assets/cpassword.jpeg";
+// import cpassword from "../assets/cpassword.jpeg";
 import "./ChangePassword.css";
 
 const ChangePassword = () => {
-  const [loginId, setLoginId] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) setLoginId(storedUser.loginId);
-  }, []);
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -51,7 +45,6 @@ const ChangePassword = () => {
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
-      console.error(error.response || error.message);
       setMessage(
         "❌ " + (error.response?.data?.message || "Error changing password")
       );
@@ -71,27 +64,27 @@ const ChangePassword = () => {
           <FaUserCircle className="user-icon" />
         </div>
 
-        <nav className="nav-menu">
-          <button className="nav-btn" onClick={() => navigate("/userdashboard")}>
-            <FaTachometerAlt /> Dashboard
-          </button>
+       <nav className="nav-menu">
+  <button className="nav-btn" onClick={() => navigate("/userdashboard")}>
+    <FaTachometerAlt /> Dashboard
+  </button>
 
-          <button className="nav-btn" onClick={() => navigate("/transactions")}>
-            <FaExchangeAlt /> Transactions
-          </button>
+  <button className="nav-btn" onClick={() => navigate("/transactions")}>
+    <FaExchangeAlt /> Transactions
+  </button>
 
-          <button className="nav-btn" onClick={() => navigate("/reports")}>
-            <FaChartBar /> Reports
-          </button>
+  <button className="nav-btn active" onClick={() => navigate("/reports")}>
+    <FaChartBar /> Reports
+  </button>
 
-          <button className="nav-btn" onClick={() => navigate("/help")}>
-            <FaQuestionCircle /> Help & Support
-          </button>
+  <button className="nav-btn" onClick={() => navigate("/help")}>
+    <FaQuestionCircle /> Help & Support
+  </button>
 
-          <button className="nav-btn active" onClick={() => navigate("/change-password")}>
-            <FaLock /> Change Password
-          </button>
-        </nav>
+  <button className="nav-btn" onClick={() => navigate("/change-password")}>
+    <FaLock /> Change Password
+  </button>
+</nav>
 
         <button className="logout-btn" onClick={handleLogout}>
           <FaSignOutAlt /> Logout
@@ -102,19 +95,16 @@ const ChangePassword = () => {
       <main
         className="change-password-page"
         style={{
-          backgroundImage: `url(${cpassword})`,
+          backgroundImage: `url(https://i.ibb.co/1fxBzpCg/cpassword.jpg )`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="change-password-container">
+        <div className="change-password-container simple">
+
           <h2>Change Password</h2>
 
           <form onSubmit={handleChangePassword}>
-            {/* Login ID */}
-            <label>Email/User ID</label>
-            <input type="text" value={loginId} disabled />
-
             {/* Old Password */}
             <label>Old Password</label>
             <input
@@ -135,8 +125,8 @@ const ChangePassword = () => {
               required
             />
 
-            {/* Confirm New Password */}
-            <label>Confirm New Password</label>
+            {/* Confirm Password */}
+            <label>Confirm Password</label>
             <input
               type="password"
               value={confirmPassword}

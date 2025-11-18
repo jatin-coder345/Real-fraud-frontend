@@ -289,3 +289,24 @@ body {
   height: 100vh; /* covers full viewport height */
   background-color: #f8fafc;
 }
+
+.nav-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  background: none;
+  border: none;
+  text-align: left;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+  background-color: #6366f1;
+}

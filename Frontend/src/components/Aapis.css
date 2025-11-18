@@ -1,0 +1,191 @@
+.admin-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ===== Sidebar ===== */
+.admin-sidebar {
+  width: 250px;
+  background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
+  color: #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1.5rem 1rem;
+}
+
+.logo {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: whitesmoke;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu li {
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.menu li:hover,
+.menu li.active {
+  background-color: #1e293b;
+  color: #38bdf8;
+}
+
+/* ===== Main Content ===== */
+.admin-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+.admin-header h1 {
+  font-size: 1.8rem;
+  color: #1e293b;
+}
+
+.admin-header p {
+  color: #64748b;
+  margin-bottom: 2rem;
+}
+
+/* ===== API Table Section ===== */
+.table-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+}
+
+.api-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.api-table th,
+.api-table td {
+  text-align: left;
+  padding: 14px 16px;
+}
+
+.api-table th {
+  background-color: #f1f5f9;
+  color: #334155;
+  font-weight: 600;
+}
+
+.api-table tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.api-table tr:hover {
+  background-color: #e2e8f0;
+  transition: background 0.2s;
+}
+
+/* ===== Endpoint ===== */
+.endpoint {
+  color: #2563eb;
+  font-family: "Courier New", monospace;
+}
+
+/* ===== Buttons ===== */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.view-btn,
+.delete-btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.view-btn {
+  background-color: #38bdf8;
+  color: white;
+}
+
+.view-btn:hover {
+  background-color: #0284c7;
+}
+
+.delete-btn {
+  background-color: #ef4444;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #b91c1c;
+}
+
+/* ===== Status Badge ===== */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.status-badge.active {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.inactive {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* ===== Loading / Error ===== */
+.loading,
+.error {
+  text-align: center;
+  margin-top: 2rem;
+  color: #475569;
+  font-size: 1rem;
+}
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+.spinner {
+  width: 55px;
+  height: 55px;
+  border: 5px solid #e2e8f0;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

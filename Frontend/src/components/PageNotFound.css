@@ -1,0 +1,43 @@
+.page404-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fafafa;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.page404-content {
+  text-align: center;
+  color: #333;
+}
+
+.page404-icon {
+  font-size: 5rem;
+  color: #c5c5c5;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+button {
+  padding: 0.5rem 1.3rem;
+  background-color: #e6e6e6;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background-color: #ccc;
+}

@@ -1,0 +1,395 @@
+/* ===== Layout ===== */
+.admin-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafc;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ===== Sidebar ===== */
+.admin-sidebar {
+  width: 250px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: fixed;              /* ✅ keeps sidebar fixed */
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;             /* ✅ makes sidebar scrollable if too tall */
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  padding: 12px 18px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+}
+
+.menu li:hover,
+.menu li.active {
+  background: #334155;
+}
+
+/* ===== Main Content ===== */
+.admin-content {
+  flex: 1;
+  margin-left: 250px;           /* ✅ pushes content beside sidebar */
+  padding: 30px;
+  height: 100vh;
+  overflow-y: auto;             /* ✅ allows vertical scrolling */
+  box-sizing: border-box;
+}
+
+.admin-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.admin-header p {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* ===== Stats Section ===== */
+.stats-sectionn {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  flex: 1;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: 0.3s;
+  min-width: 250px;
+}
+
+.stat-card:hover {
+  transform: scale(1.03);
+}
+
+.stat-card h3 {
+  font-size: 1.2rem;
+  color: #374151;
+}
+
+.stat-card p {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.stat-card.users {
+  border-left: 6px solid #3b82f6;
+}
+.stat-card.transactions {
+  border-left: 6px solid #10b981;
+}
+.stat-card.fraud {
+  border-left: 6px solid #ef4444;
+}
+
+/* ===== Charts ===== */
+.chart-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.chart-card {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 400px;
+}
+
+/* ===== Table Section ===== */
+.table-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transaction-table th,
+.transaction-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.transaction-table th {
+  background: #f3f4f6;
+}
+
+.transaction-table .fraud {
+  color: #e11d48;
+  font-weight: bold;
+}
+
+.transaction-table .legit {
+  color: #10b981;
+  font-weight: bold;
+}
+
+/* Sidebar Enhancements */
+.admin-sidebar {
+  background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
+  color: #f9fafb;
+  width: 240px;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.sidebar-logo-icon {
+  font-size: 1.8rem;
+  color: #60a5fa;
+}
+
+.logo-text {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.admin-name {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  color: #9ca3af;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.menu li:hover,
+.menu li.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.menu-icon {
+  font-size: 1.1rem;
+}
+
+/* ===== Live Transactions Page ===== */
+.transactions-section {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+}
+
+.transactions-table-container {
+  overflow-x: auto;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transactions-table th,
+.transactions-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.transactions-table th {
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.transactions-table tr:hover {
+  background-color: #f3f4f6;
+  transition: 0.2s;
+}
+
+.fraud-row {
+  background: #fee2e2 !important;
+  color: #991b1b;
+  font-weight: 500;
+}
+
+.no-data {
+  text-align: center;
+  color: #6b7280;
+  padding: 20px;
+  font-style: italic;
+}
+
+/* ===== Loader Styling ===== */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: #4a90e2;
+  font-size: 1.2rem;
+}
+
+.loader-icon {
+  font-size: 3rem;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Loader Styling ===== */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: #4a90e2;
+  font-size: 1.2rem;
+}
+
+.loader-icon {
+  font-size: 3rem;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Centers loader in page */
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+}
+
+/* 🔹 Inline layout (symbol + text side by side) */
+.inline-loader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4f46e5;
+}
+
+.inline-loader.small {
+  justify-content: center;
+}
+
+/* 🔄 Moving circular symbol */
+.moving-loader {
+  border: 4px solid #e0e7ff;
+  border-top: 4px solid #4f46e5;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  animation: spin 1s linear infinite;
+}
+
+.moving-loader.small {
+  width: 20px;
+  height: 20px;
+  border-width: 3px;
+}
+
+/* Rotation animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Text animation */
+.loading-text {
+  font-size: 17px;
+  font-weight: 500;
+  color: #4f46e5;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.no-data {
+  text-align: center;
+  padding: 25px 0;
+}
+

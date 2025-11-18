@@ -1,0 +1,55 @@
+
+.user-transactions-container {
+  padding: 2rem;
+  font-family: "Poppins", sans-serif;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+h2 {
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.welcome {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.user-table-container {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.user-table th {
+  background-color: #f3f4f6;
+  text-transform: uppercase;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.failed {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+.success {
+  color: #16a34a;
+  font-weight: bold;
+}

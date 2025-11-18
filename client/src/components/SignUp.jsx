@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignUp.css";
-import Login from "../components/Login";
+import Login from "./Login";
 import img1 from "../assets/signup1.png";
 import img2 from "../assets/signup2.png";
 import img3 from "../assets/signup3.png";

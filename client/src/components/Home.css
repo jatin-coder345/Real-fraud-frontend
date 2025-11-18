@@ -552,3 +552,96 @@ html, body {
   background-color: #3674b5; /* blue background */
   min-height: 100vh;
 }
+
+/* ===== Navbar Buttons (Login + Signup) ===== */
+.nav-btn {
+  background: #00d0ff;           /* Neon Aqua Blue */
+  color: #000;
+  padding: 0.6rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 700;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 208, 255, 0.3);
+}
+
+.nav-btn:hover {
+  background: #ffffff;
+  color: #3674b5;                /* Blue text on hover */
+  box-shadow: 0 0 14px #00d0ff, 
+              0 0 20px rgba(0, 208, 255, 0.7);
+  transform: translateY(-2px);
+}
+
+/* Extra polish when clicking */
+.nav-btn:active {
+  transform: scale(0.96);
+}
+
+/* ===== Navbar Buttons Wrapper ===== */
+.nav-links {
+  display: flex;               /* Makes buttons align horizontally */
+  align-items: center;         /* Vertically center them */
+  gap: 1rem;                   /* Space between Login & Signup */
+}
+
+/* ===== Buttons Styling ===== */
+.nav-btn {
+  background-color: rgb(0, 208, 255);
+  color: black;
+  padding: 0.6rem 1.3rem;
+  border-radius: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: #0ea5e9;
+  color: white;
+  box-shadow: 0 0 12px rgba(0, 208, 255, 0.7);
+  transform: translateY(-2px);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* LOGIN BUTTON */
+.nav-btn.login-btn {
+  width: 90px;                 /* Perfect for "Login" */
+  background-color: rgb(0, 208, 255);
+  color: black;
+  padding: 0.6rem 1rem;
+  border-radius: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+/* SIGNUP BUTTON */
+.nav-btn.signup-btn {
+  width: 120px;                /* Accurate width for "Sign Up" */
+  background-color: #34d399;
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+/* Hover effects */
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+}
+

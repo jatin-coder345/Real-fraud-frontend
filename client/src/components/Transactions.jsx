@@ -31,12 +31,12 @@ const Transactions = () => {
         </div>
 
         <nav className="nav-menu">
-          <a href="/Userdashboard"><FaTachometerAlt /> Dashboard</a>
-          <a href="/Transactions" className="active"><FaExchangeAlt /> Transactions</a>
-          <a href="/Reports"><FaChartBar /> Reports</a>
-          <a href="/Help"><FaQuestionCircle /> Help & Support</a>
+          <a href="/userdashboard"><FaTachometerAlt /> Dashboard</a>
+          <a href="/transactions" className="active"><FaExchangeAlt /> Transactions</a>
+          <a href="/reports"><FaChartBar /> Reports</a>
+          <a href="/help"><FaQuestionCircle /> Help & Support</a>
           {/* <a href="/Settings"><FaCog /> Settings</a> */}
-          <a href="/Change-Password"><FaLock /> Change Password</a>
+          <a href="/change-password"><FaLock /> Change Password</a>
         </nav>
 
         {/* === Logout Button === */}

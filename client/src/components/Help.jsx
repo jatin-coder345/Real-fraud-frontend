@@ -69,19 +69,19 @@ const Help = () => {
         </div>
 
         <nav className="nav-menu">
-          <a href="/Userdashboard">
+          <a href="/userdashboard">
             <FaTachometerAlt /> Dashboard
           </a>
-          <a href="/Transactions">
+          <a href="/transactions">
             <FaExchangeAlt /> Transactions
           </a>
-          <a href="/Reports">
+          <a href="/reports">
             <FaChartBar /> Reports
           </a>
-          <a href="/Help" className="active">
+          <a href="/help" className="active">
             <FaQuestionCircle /> Help & Support
           </a>
-          <a href="/Change-Password">
+          <a href="/change-password">
             <FaLock /> Change Password
           </a>
         </nav>

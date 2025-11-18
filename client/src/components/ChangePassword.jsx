@@ -72,19 +72,19 @@ const ChangePassword = () => {
         </div>
 
         <nav className="nav-menu">
-          <a href="/Userdashboard">
+          <a href="/userdashboard">
             <FaTachometerAlt /> Dashboard
           </a>
-          <a href="/Transactions">
+          <a href="/uransactions">
             <FaExchangeAlt /> Transactions
           </a>
-          <a href="/Reports">
+          <a href="/reports">
             <FaChartBar /> Reports
           </a>
-          <a href="/Help">
+          <a href="/help">
             <FaQuestionCircle /> Help & Support
           </a>
-          <a href="/ChangePassword" className="active">
+          <a href="/change-password" className="active">
             <FaLock /> Change Password
           </a>
         </nav>

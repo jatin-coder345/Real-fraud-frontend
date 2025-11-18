@@ -2,7 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import "./Knowledgebase.css";
+import "./knowledgebase.css";
 
 const KnowledgeBase = () => {
   const navigate = useNavigate();

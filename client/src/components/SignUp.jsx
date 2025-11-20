@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignUp.css";
-import Login from "./Login";
+import Login from "../components/Login";
 import img1 from "../assets/signup1.png";
 import img2 from "../assets/signup2.png";
 import img3 from "../assets/signup3.png";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const timersRef = useRef([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -20,12 +22,13 @@ const SignUp = () => {
     password: "",
     role: "user",
   });
+
   const [errors, setErrors] = useState({});
-  const [message, setMessage] = useState({ text: "", type: "" });
+  const [message, setMessage] = useState({ text: "", type: "", visible: false });
 
   const images = [img1, img2, img3];
 
-  // Auto image slider
+  // Auto slider
   useEffect(() => {
     const interval = setInterval(
       () => setCurrentImage((prev) => (prev + 1) % images.length),
@@ -34,12 +37,19 @@ const SignUp = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // ✅ Handle input changes + clear specific field error live
+  // Clean timers
+  useEffect(() => {
+    return () => {
+      timersRef.current.forEach((t) => clearTimeout(t));
+      timersRef.current = [];
+    };
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Clear error for the field being typed in
     setErrors((prev) => {
       const updated = { ...prev };
       delete updated[name];
@@ -47,15 +57,13 @@ const SignUp = () => {
     });
   };
 
-  // ✅ Validate all fields before submission
   const validateForm = () => {
     const newErrors = {};
     if (!formData.firstName.trim()) newErrors.firstName = "First name required";
     if (!formData.lastName.trim()) newErrors.lastName = "Last name required";
     if (!formData.userId.trim()) newErrors.userId = "User ID required";
     if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email";
-    if (!/^[0-9]{10}$/.test(formData.phone))
-      newErrors.phone = "Phone number must be 10 digits";
+    if (!/^[0-9]{10}$/.test(formData.phone)) newErrors.phone = "Phone must be 10 digits";
     if (formData.password.length < 8)
       newErrors.password = "Password must be at least 8 characters";
 
@@ -63,10 +71,32 @@ const SignUp = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ✅ Connect frontend to backend
+  // show timed popup message
+  const showTimedMessage = ({ text, type, openLoginAfter = false }) => {
+    timersRef.current.forEach((t) => clearTimeout(t));
+    timersRef.current = [];
+
+    setMessage({ text, type, visible: true });
+
+    const hideTimer = setTimeout(() => {
+      setMessage((m) => ({ ...m, visible: false }));
+    }, 5000);
+
+    timersRef.current.push(hideTimer);
+
+    if (openLoginAfter) {
+      const openTimer = setTimeout(() => {
+        setShowLogin(true);
+      }, 5000);
+
+      timersRef.current.push(openTimer);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage({ text: "", type: "" });
+
+    setMessage({ text: "", type: "", visible: false });
 
     if (!validateForm()) return;
 
@@ -80,43 +110,60 @@ const SignUp = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage({ text: "✅ Registration successful!", type: "success" });
-        setTimeout(() => setShowLogin(true), 1500);
+        showTimedMessage({
+          text: "✅ Registration successful!",
+          type: "success",
+          openLoginAfter: true,
+        });
       } else {
-        setMessage({ text: `❌ ${data.message}`, type: "error" });
+        showTimedMessage({
+          text: `❌ ${data.message || "Registration failed"}`,
+          type: "error",
+        });
       }
     } catch (error) {
       console.error("Signup error:", error);
-      setMessage({ text: "⚠️ Error connecting to server", type: "error" });
+      showTimedMessage({
+        text: "⚠️ Error connecting to server",
+        type: "error",
+      });
     }
   };
 
   return (
     <div className="signup-container">
-      {/* ===== Left Image Section ===== */}
+      {/* LEFT SLIDER */}
       <div
         className="signup-left"
-        onClick={() => setCurrentImage((prev) => (prev + 1) % images.length)}
+        onClick={() =>
+          setCurrentImage((prev) => (prev + 1) % images.length)
+        }
       >
         <div className="image-slider">
           {images.map((img, index) => (
             <img
               key={index}
               src={img}
-              alt="signup visual"
+              alt="signup"
               className={`slide ${index === currentImage ? "active" : ""}`}
             />
           ))}
         </div>
       </div>
 
-      {/* ===== Right Form Section ===== */}
+      {/* RIGHT FORM */}
       <div className="signup-right">
         <div className="signup-box">
           <h2>Create Your Account</h2>
 
           {message.text && (
-            <div className={`message-box ${message.type}`}>{message.text}</div>
+            <div
+              className={`message-box ${message.type} ${
+                message.visible ? "visible" : "hidden"
+              }`}
+            >
+              {message.text}
+            </div>
           )}
 
           <form className="signup-form" onSubmit={handleSubmit}>
@@ -156,7 +203,9 @@ const SignUp = () => {
                 value={formData.userId}
                 onChange={handleChange}
               />
-              {errors.userId && <span className="error">{errors.userId}</span>}
+              {errors.userId && (
+                <span className="error">{errors.userId}</span>
+              )}
             </div>
 
             <div className="input-group">
@@ -208,7 +257,6 @@ const SignUp = () => {
                 className="role-select"
               >
                 <option value="user">User</option>
-                {/* <option value="admin">Admin</option> */}
               </select>
             </div>
 
@@ -232,7 +280,6 @@ const SignUp = () => {
         </div>
       </div>
 
-      {/* ===== Login Popup ===== */}
       {showLogin && <Login closePopup={() => setShowLogin(false)} />}
     </div>
   );

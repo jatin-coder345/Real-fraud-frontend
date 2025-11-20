@@ -142,7 +142,8 @@ input:focus {
   font-size: 0.8rem;
   margin-top: 3px;
   opacity: 0;
-  animation: fadeInError 0.4s forwards;
+  animation: fadeIn 5s ease-in-out;
+
 }
 
 @keyframes fadeInError {
@@ -259,15 +260,35 @@ body {
   box-shadow: 0 0 6px #a1e3fc;
 }
 
+/* Message box: short fade-in, short fade-out via transition.
+   React toggles .visible / .hidden to keep the message on screen for 5s. */
 .message-box {
   margin-bottom: 15px;
   padding: 10px;
   border-radius: 8px;
   font-size: 0.95rem;
   text-align: center;
-  animation: fadeIn 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 300ms ease, transform 300ms ease;
+  pointer-events: none;
 }
 
+/* visible state (React adds "visible") */
+.message-box.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* hidden state (React adds "hidden") */
+.message-box.hidden {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+}
+
+/* Success and error color variants */
 .message-box.success {
   background-color: #d4edda;
   color: #155724;
@@ -280,6 +301,7 @@ body {
   border: 1px solid #f5c6cb;
 }
 
+/* Keep single error style for inline field errors */
 .error {
   color: #ff3b3b;
   font-size: 0.8rem;
@@ -287,6 +309,7 @@ body {
   display: block;
 }
 
+/* Toggle icon position */
 .password-group {
   position: relative;
 }
@@ -299,7 +322,20 @@ body {
   font-size: 1.2rem;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+/* remove duplicate @keyframes fadeIn from before - not needed now */
+
+
+@keyframes fadeInError {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error {
+  animation: fadeInError 5s forwards;
 }
